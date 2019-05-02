@@ -7,7 +7,7 @@
 		Consumable = 1,
 
 		Tool = 10,
-        StackingTool = 11,
+		StackingTool = 11,
 
 		Armor = 12,
 

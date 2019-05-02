@@ -6,13 +6,13 @@ namespace DiscordBot.Modules.ChatCraft
 	public class Recipe
 	{
 		public string name;
-        public string description;
-        public List<Location> allowedLocations = new List<Location>();
-        public List<Item> requiredTools = new List<Item>();
+		public string description;
+		public List<Location> allowedLocations = new List<Location>();
+		public List<Item> requiredTools = new List<Item>();
 		public List<StatCount> requiredStatCount = new List<StatCount>();
 		public List<ItemCount> consumed = new List<ItemCount>();
 		public List<ItemCount> creates = new List<ItemCount>();
-        public float successChance = 1f;
+		public float successChance = 1f;
 
 		public static Recipe Find(string name)
 		{

@@ -2,11 +2,12 @@
 A Township Tale's official Discord bot, written with Discord.NET
 
 Join https://discord.gg/townshiptale to see Town Crier in action!
+Join https://discord.gg/GNpmEN2 to discuss contributing to the bot.
 
 This is still early days, so still working out the kinks of how this will work on GitHub.
 
 Who to talk to about stuff:
-- Joel_Alta in the Discord linked above
+- Joel_Alta in either Discord linked above
 
 Things that need some serious work:
 - 	Program.cs - *throws up*, this whole project is what happens when someone hacks in things with very little thought as to where/how things are arranged.

@@ -3,7 +3,6 @@ using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscordBot.Features
@@ -27,7 +26,12 @@ namespace DiscordBot.Features
 				ITextChannel tipsandhelp = channels.FirstOrDefault(item => item.Name == "tips-and-help") as ITextChannel;
 				ITextChannel gettingstarted = channels.FirstOrDefault(item => item.Name == "getting-started") as ITextChannel;
 
-				await message.Channel.SendMessageAsync($"Hi {message.Author.Mention}, unfortunately it's {DateTime.Now.ToShortTimeString()} in Sydney right now.\nIf you're new, check out {gettingstarted.Mention}.\nIf you've got a bug, hit up {bugs.Mention}.\nIf you've got feedback, drop it at {feedback.Mention}.\nOtherwise visit {tipsandhelp.Mention} and hopefully someone else can help!");
+				await message.Channel.SendMessageAsync($"Hi {message.Author.Mention}, unfortunately " +
+					$"it's {DateTime.Now.ToShortTimeString()} in Sydney right now.\n" +
+					$"If you're new, check out {gettingstarted.Mention}.\n" +
+					$"If you've got a bug, hit up {bugs.Mention}.\n" +
+					$"If you've got feedback, drop it at {feedback.Mention}.\n" +
+					$"Otherwise visit {tipsandhelp.Mention} and hopefully someone else can help!");
 			}
 		}
 	}

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscordBot.Modules.ChatCraft
@@ -81,7 +80,7 @@ namespace DiscordBot.Modules.ChatCraft
 				await ReplyAsync("You don't have any dice");
 			}
 		}
-
+		
 		[Command("testscore")]
 		public async Task Score(IUser user = null)
 		{
@@ -96,7 +95,7 @@ namespace DiscordBot.Modules.ChatCraft
 			foreach (Player player in ChatCraft.Instance.State.players.OrderByDescending(item => item.score).Take(count))
 			{
 				SocketGuildUser user = Context.Guild.GetUser(player.identifier);
-				
+
 				await ReplyAsync((user.Nickname ?? user.Username) + " : " + player.score);
 			}
 		}
@@ -173,10 +172,10 @@ namespace DiscordBot.Modules.ChatCraft
 		}
 
 		#region Inventory
-		
+
 
 		[Command("give")]
-		public async Task Give(IUser user, int count, [ InInventory]Item item)
+		public async Task Give(IUser user, int count, [InInventory]Item item)
 		{
 			Player player = GetPlayer();
 
@@ -235,7 +234,7 @@ namespace DiscordBot.Modules.ChatCraft
 
 			await ReplyAsync($"You have {stats.shared} {handsValue} {stat.name}.");
 		}
-		
+
 		[Group]
 		public class EquipCommands : CrierModuleBase
 		{
@@ -312,7 +311,7 @@ namespace DiscordBot.Modules.ChatCraft
 		}
 
 		[Command("lookat"), Alias("Examine", "look")]
-		public async Task LookAtItem([ InInventoryOrEquipment]Item item)
+		public async Task LookAtItem([InInventoryOrEquipment]Item item)
 		{
 			Player player = GetPlayer();
 
@@ -426,14 +425,14 @@ namespace DiscordBot.Modules.ChatCraft
 		}
 
 		#endregion
-		
+
 		#region Recipes
 
 		[Group("recipes"), Alias("recipe", "task", "activity")]
 		public class RecipeCommandsOptional : CrierModuleBase
 		{
 			[Command(), Priority(-3)]
-			public async Task Craft(int count, [ Learnt]Recipe recipe)
+			public async Task Craft(int count, [Learnt]Recipe recipe)
 			{
 				Player player = GetPlayer();
 
@@ -518,7 +517,7 @@ namespace DiscordBot.Modules.ChatCraft
 			}
 
 			[Command(), Priority(-3)]
-			public async Task Craft([ Learnt]Recipe recipe)
+			public async Task Craft([Learnt]Recipe recipe)
 			{
 				await Craft(1, recipe);
 			}
@@ -528,7 +527,7 @@ namespace DiscordBot.Modules.ChatCraft
 		public class RecipeCommands : CrierModuleBase
 		{
 			[Command("Read"), Alias("Look", "Lookat")]
-			public async Task Read([ Learnt]Recipe recipe)
+			public async Task Read([Learnt]Recipe recipe)
 			{
 				Player player = GetPlayer();
 
@@ -708,7 +707,7 @@ namespace DiscordBot.Modules.ChatCraft
 			}
 
 			[Command("share with"), Alias("sharewith", "teach")]
-			public async Task ShareWith(IUser user, [ Learnt]Recipe recipe)
+			public async Task ShareWith(IUser user, [Learnt]Recipe recipe)
 			{
 				Player player = GetPlayer();
 				Player target = GetPlayer(user);
@@ -1020,7 +1019,7 @@ namespace DiscordBot.Modules.ChatCraft
 					string message = "";
 
 					IReadOnlyCollection<SocketGuildUser> users = Context.Guild.Users;
-					
+
 					foreach (Player player in ChatCraft.Instance.State.players)
 					{
 						IGuildUser user = users.FirstOrDefault(test => test.Id == player.identifier);
@@ -1283,80 +1282,80 @@ namespace DiscordBot.Modules.ChatCraft
 				await ReplyAsync(recipe.name + " now expects: " + item.name);
 			}
 
-            [Command("checkin")]
-            public async Task Checkin(string comment)
-            {
-                Player player = GetPlayer();
+			[Command("checkin")]
+			public async Task Checkin(string comment)
+			{
+				Player player = GetPlayer();
 
-                await ReplyAsync("Starting checkin");
+				await ReplyAsync("Starting checkin");
 
-                var process = new Process();
-                var startinfo = new ProcessStartInfo("cmd.exe", $@"/C {Directory.GetCurrentDirectory()}/../../../../checkin.bat {comment}");
-                startinfo.RedirectStandardOutput = true;
-                startinfo.UseShellExecute = false;
-                process.StartInfo = startinfo;
-                process.OutputDataReceived += async (sender, args) =>
-                {
-                    if (args.Data != null && args.Data.Length > 0)
-                    {
-                        await Context.Channel.SendMessageAsync(args.Data);
-                    }
-                };
-                process.Start();
-                process.BeginOutputReadLine();
-                process.WaitForExit();
-            }
+				var process = new Process();
+				var startinfo = new ProcessStartInfo("cmd.exe", $@"/C {Directory.GetCurrentDirectory()}/../../../../checkin.bat {comment}");
+				startinfo.RedirectStandardOutput = true;
+				startinfo.UseShellExecute = false;
+				process.StartInfo = startinfo;
+				process.OutputDataReceived += async (sender, args) =>
+				{
+					if (args.Data != null && args.Data.Length > 0)
+					{
+						await Context.Channel.SendMessageAsync(args.Data);
+					}
+				};
+				process.Start();
+				process.BeginOutputReadLine();
+				process.WaitForExit();
+			}
 
-            [Command("learn all recipes")]
-            public async Task LearnRecipes()
-            {
-                Player player = GetPlayer();
+			[Command("learn all recipes")]
+			public async Task LearnRecipes()
+			{
+				Player player = GetPlayer();
 
-                player.recipes.Clear();
-                player.recipes.AddRange(ChatCraft.Instance.State.recipes);
+				player.recipes.Clear();
+				player.recipes.AddRange(ChatCraft.Instance.State.recipes);
 
-                await ReplyAsync("With power comes great responsibility.");
-            }
+				await ReplyAsync("With power comes great responsibility.");
+			}
 
-            [Command("clear inventory")]
-            public async Task ClearInventory()
-            {
-                Player player = GetPlayer();
+			[Command("clear inventory")]
+			public async Task ClearInventory()
+			{
+				Player player = GetPlayer();
 
-                player.items.Clear();
+				player.items.Clear();
 
-                await ReplyAsync("Well aren't you an unlucky bugger.");
-            }
+				await ReplyAsync("Well aren't you an unlucky bugger.");
+			}
 
-            [Command("fill inventory")]
-            public async Task GiveAllItems()
-            {
-                Player player = GetPlayer();
+			[Command("fill inventory")]
+			public async Task GiveAllItems()
+			{
+				Player player = GetPlayer();
 
-                foreach (Item item in ChatCraft.Instance.State.items)
-                {
-                    if (item.itemType == ItemType.Armor || item.itemType == ItemType.Tool)
-                    {
-                        player.items.Add(new ItemCount(item, item.durability));
-                    }
-                    else
-                    {
-                        ItemCount existing = player.items.FirstOrDefault(count => count.item == item);
+				foreach (Item item in ChatCraft.Instance.State.items)
+				{
+					if (item.itemType == ItemType.Armor || item.itemType == ItemType.Tool)
+					{
+						player.items.Add(new ItemCount(item, item.durability));
+					}
+					else
+					{
+						ItemCount existing = player.items.FirstOrDefault(count => count.item == item);
 
-                        if (existing != null)
-                        {
-                            existing.count++;
-                        }
-                        else
-                        {
-                            player.items.Add(new ItemCount(item, 10));
-                        }
-                    }
-                }
+						if (existing != null)
+						{
+							existing.count++;
+						}
+						else
+						{
+							player.items.Add(new ItemCount(item, 10));
+						}
+					}
+				}
 
-                await ReplyAsync("Well aren't you a lucky bugger.");
-            }
-        }
+				await ReplyAsync("Well aren't you a lucky bugger.");
+			}
+		}
 
 	}
 }

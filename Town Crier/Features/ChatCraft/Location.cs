@@ -7,7 +7,7 @@ namespace DiscordBot.Modules.ChatCraft
 	public class Location
 	{
 		public string name;
-        public List<string> descriptions = new List<string>();
+		public List<string> descriptions = new List<string>();
 		public ExploreSet exploreSet;
 
 		[JsonIgnore]

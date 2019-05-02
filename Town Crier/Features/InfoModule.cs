@@ -1,23 +1,19 @@
-﻿using System.Threading.Tasks;
-using Discord.Commands;
-using Discord;
-using System.Collections.Generic;
-using Discord.Rest;
-using System.Linq;
-using System;
-using DiscordBot.Modules.ChatCraft;
-
-using Microsoft.Extensions.DependencyInjection;
-using Discord.WebSocket;
-using System.Text;
-using RestSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Discord.Addons.Interactive;
 using Alta.WebApi.Models;
-using System.Text.RegularExpressions;
-using DiscordBot;
 using Alta.WebApi.Models.DTOs.Responses;
+using Discord;
+using Discord.Addons.Interactive;
+using Discord.Commands;
+using Discord.WebSocket;
+using DiscordBot;
+using DiscordBot.Modules.ChatCraft;
+using Newtonsoft.Json;
+using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace DiscordBot
 {
@@ -62,10 +58,10 @@ namespace DiscordBot
 
 				return Task.FromResult(TypeReaderResult.FromError(CommandError.Unsuccessful, error));
 			}
-			
+
 			LastInput = input;
 			LastValue = result;
-			
+
 			return Task.FromResult(TypeReaderResult.FromSuccess(result));
 		}
 
@@ -161,7 +157,7 @@ namespace DiscordBot
 					select item).FirstOrDefault();
 		}
 	}
-	
+
 	public class ItemTypeReader : SimpleChatCraftTypeReader<Item>
 	{
 		public override Func<Item, bool> GetCheck(string nameLower, ref string error)
@@ -311,7 +307,7 @@ namespace DiscordBot
 					return PreconditionResult.FromSuccess();
 				}
 			}
-			
+
 			return PreconditionResult.FromError(GetError());
 		}
 
@@ -341,7 +337,7 @@ namespace DiscordBot
 	public class AllyAttribute : LimitedAttribute
 	{
 		protected override Type Type { get { return typeof(Unit); } }
-		
+
 		protected override bool MeetsCondition(Player player, object value)
 		{
 			Unit unit = value as Unit;
@@ -368,7 +364,7 @@ namespace DiscordBot
 
 			bool isEnemy = player.combatState != null &&
 				player.combatState.instance.teams[(player.combatState.teamIndex + 1) % 2].currentUnits.Contains(unit);
-			
+
 			return isEnemy;
 		}
 
@@ -466,7 +462,7 @@ namespace DiscordBot
 		protected override bool MeetsCondition(Player player, object value)
 		{
 			Item item = value as Item;
-			
+
 			return player.equipped.Values.Any(test => test != null && test.item == item) ||
 					player.items.Any(test => test.item == item);
 		}
@@ -640,7 +636,7 @@ public class InfoModule : CrierModuleBase
 	public async Task Race([Remainder]string args)
 	{
 		string[] parts = args.Split(' ');
-		
+
 		if (parts.Length < 2)
 		{
 			await ReplyAsync("There must be at least two competitors! Try adding emojis to the command.");
@@ -648,7 +644,7 @@ public class InfoModule : CrierModuleBase
 		}
 
 		Random random = new Random();
-		
+
 		string[] emojis = new string[Math.Min(5, parts.Length)];
 		int[] progresses = new int[emojis.Length];
 		int[] strengths = new int[emojis.Length];
@@ -658,7 +654,7 @@ public class InfoModule : CrierModuleBase
 			emojis[i] = parts[i];
 			strengths[i] = random.Next(5, 8);
 		}
-		
+
 		IUserMessage message = await ReplyAsync("Ready...");
 
 		await Task.Delay(500);
@@ -741,7 +737,7 @@ public class InfoModule : CrierModuleBase
 
 		for (int i = 0; i < emojis.Length; i++)
 		{
-			response += new string('ㅤ', progresses[i]) + 
+			response += new string('ㅤ', progresses[i]) +
 				emojis[i] +
 				new string('ㅤ', 50 - progresses[i]) +
 				"||\n";
@@ -814,9 +810,9 @@ public class InfoModule : CrierModuleBase
 			var request = new RestRequest(Method.GET);
 
 			IRestResponse response = client.Execute(request);
-			
+
 			TrelloCard[] cards = JsonConvert.DeserializeObject<TrelloCard[]>(response.Content);
-			
+
 			foreach (TrelloCard card in cards)
 			{
 				if (card.name.ToLower().Contains(query))
@@ -935,7 +931,7 @@ public class InfoModule : CrierModuleBase
 				if (random.NextDouble() < ratio)
 				{
 					data[ix, iy] = -1;
-				
+
 					if (data[ix - 1, iy - 1] >= 0)
 					{
 						data[ix - 1, iy - 1]++;
@@ -963,7 +959,7 @@ public class InfoModule : CrierModuleBase
 				}
 			}
 		}
-		
+
 		StringBuilder result = new StringBuilder();
 
 		for (int iy = 1; iy <= size; iy++)
@@ -1015,7 +1011,7 @@ public class InfoModule : CrierModuleBase
 		foreach (IGuildUser user in (Context.Guild as SocketGuild).Users)
 		{
 			Player player = ChatCraft.Instance.GetExistingPlayer(user);
-			
+
 			result
 				.Append(user.Id)
 				.Append(',')
@@ -1048,7 +1044,7 @@ public class InfoModule : CrierModuleBase
 		{
 			return;
 		}
-		
+
 		IRole role = Context.Guild.Roles.FirstOrDefault(test => test.Name == "followers");
 
 		await role.ModifyAsync(properties => properties.Mentionable = true);
@@ -1140,16 +1136,9 @@ public class InfoModule : CrierModuleBase
 		List<string> commands = new List<string>();
 		List<string> descriptions = new List<string>();
 
-		string joelName = "Joel";
-
-		if (Context.Guild != null)
-		{
-			SocketGuildUser result = Context.Guild.GetUser(334934015284871169);
-			
-			joelName = result.Mention;
-		}
-
-		string message = $"Welcome! I am the Town Crier.\nI can help with various tasks.\n\nHere are some useful commands:\n\n";
+		string message = $"Welcome! I am the Town Crier.\n" +
+			$"I can help with various tasks.\n\n" +
+			$"Here are some useful commands:\n\n";
 
 		commands.Add("help");
 		descriptions.Add("In case you get stuck");
@@ -1167,7 +1156,7 @@ public class InfoModule : CrierModuleBase
 		descriptions.Add("Flip a coin!");
 
 		commands.Add("roll");
-		descriptions.Add("Roll a die!");
+		descriptions.Add("Roll a dice!");
 
 
 		//commands.Add("tc help");
@@ -1203,10 +1192,10 @@ public class Servers : CrierModuleBase
 
 		foreach (GameServerInfo server in servers)
 		{
-			response.AppendFormat("{0} - {3} - {1} player{2} online\n", 
-				server.Name, 
-				server.OnlinePlayers.Count, 
-				server.OnlinePlayers.Count == 1 ? "" : "s", 
+			response.AppendFormat("{0} - {3} - {1} player{2} online\n",
+				server.Name,
+				server.OnlinePlayers.Count,
+				server.OnlinePlayers.Count == 1 ? "" : "s",
 				(Map)server.SceneIndex);
 		}
 
@@ -1299,6 +1288,9 @@ public class WhoIs : CrierModuleBase
 
 	[Command("larry")]
 	public async Task Larry() => await ReplyAsync("A very persistent person!");
+
+	[Command("matssu")]
+	public async Task Matssu() => await ReplyAsync("An adventurer who explored the depths of the source code... The first contributor!");
 
 	static readonly string[] UnknownReplies = new string[]
 	{

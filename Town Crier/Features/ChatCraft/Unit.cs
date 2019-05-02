@@ -112,7 +112,7 @@ namespace DiscordBot.Modules.ChatCraft
 
 		[JsonIgnore]
 		public Party party;
-		
+
 		public StatGroup GetStat(string name)
 		{
 			Stat stat = ChatCraft.Instance.State.stats.FirstOrDefault(test => test.name == name);
@@ -165,12 +165,12 @@ namespace DiscordBot.Modules.ChatCraft
 				stats[stat.stat].shared = stat.count;
 			}
 
-            foreach (StatCount stat in modifiedBaseStats)
-            {
-                stats[stat.stat].shared = stat.count;
-            }
+			foreach (StatCount stat in modifiedBaseStats)
+			{
+				stats[stat.stat].shared = stat.count;
+			}
 
-            foreach (KeyValuePair<Slot, ItemCount> equipment in equipped)
+			foreach (KeyValuePair<Slot, ItemCount> equipment in equipped)
 			{
 				if (equipment.Value != null)
 				{
@@ -191,10 +191,10 @@ namespace DiscordBot.Modules.ChatCraft
 					}
 				}
 			}
-			
+
 			return stats;
 		}
-		
+
 		public ItemCount TakeEquipment(ItemCount itemCount)
 		{
 			switch (itemCount.item.itemType)
@@ -205,20 +205,20 @@ namespace DiscordBot.Modules.ChatCraft
 				case ItemType.Ring:
 				case ItemType.StackingTool:
 
-				itemCount.count--;
-				
-				if (itemCount.count == 0)
-				{
-					items.Remove(itemCount);
-				}
+					itemCount.count--;
 
-				return new ItemCount(itemCount.item, 1);
+					if (itemCount.count == 0)
+					{
+						items.Remove(itemCount);
+					}
+
+					return new ItemCount(itemCount.item, 1);
 
 				case ItemType.Tool:
 				case ItemType.Armor:
 
-				items.Remove(itemCount);
-				return itemCount;
+					items.Remove(itemCount);
+					return itemCount;
 			}
 
 			return null;
@@ -234,22 +234,22 @@ namespace DiscordBot.Modules.ChatCraft
 				case ItemType.Ring:
 				case ItemType.StackingTool:
 
-				ItemCount itemCount = items.FirstOrDefault(test => test.item == equipment.item);
+					ItemCount itemCount = items.FirstOrDefault(test => test.item == equipment.item);
 
-				if (itemCount == null)
-				{
-					itemCount = new ItemCount(equipment.item, 0);
-					items.Add(itemCount);
-				}
+					if (itemCount == null)
+					{
+						itemCount = new ItemCount(equipment.item, 0);
+						items.Add(itemCount);
+					}
 
-				itemCount.count += equipment.count;
-				break;
+					itemCount.count += equipment.count;
+					break;
 
 				case ItemType.Tool:
 				case ItemType.Armor:
 
-				items.Add(equipment);
-				break;
+					items.Add(equipment);
+					break;
 			}
 		}
 
@@ -262,25 +262,25 @@ namespace DiscordBot.Modules.ChatCraft
 				case ItemType.Pendant:
 				case ItemType.Ring:
 				case ItemType.StackingTool:
-				ItemCount itemCount = items.FirstOrDefault(test => test.item == item);
+					ItemCount itemCount = items.FirstOrDefault(test => test.item == item);
 
-				if (itemCount == null)
-				{
-					itemCount = new ItemCount(item, 0);
-					items.Add(itemCount);
-				}
+					if (itemCount == null)
+					{
+						itemCount = new ItemCount(item, 0);
+						items.Add(itemCount);
+					}
 
-				itemCount.count += count;
-				break;
+					itemCount.count += count;
+					break;
 
 				case ItemType.Tool:
 				case ItemType.Armor:
-				for (int i = 0; i < count; i++)
-				{
-					itemCount = new ItemCount(item, item.durability);
-					items.Add(itemCount);
-				}
-				break;
+					for (int i = 0; i < count; i++)
+					{
+						itemCount = new ItemCount(item, item.durability);
+						items.Add(itemCount);
+					}
+					break;
 			}
 		}
 
@@ -294,19 +294,19 @@ namespace DiscordBot.Modules.ChatCraft
 				case ItemType.Ring:
 				case ItemType.StackingTool:
 
-				ItemCount itemCount = items.FirstOrDefault(test => test.item == item);
+					ItemCount itemCount = items.FirstOrDefault(test => test.item == item);
 
-				if (itemCount == null)
-				{
-					return 0;
-				}
+					if (itemCount == null)
+					{
+						return 0;
+					}
 
-				return itemCount.count;
+					return itemCount.count;
 
 				case ItemType.Tool:
 				case ItemType.Armor:
 
-				return items.Count(test => test.item == item);
+					return items.Count(test => test.item == item);
 			}
 
 			return 0;
@@ -320,32 +320,32 @@ namespace DiscordBot.Modules.ChatCraft
 				case ItemType.Consumable:
 				case ItemType.Pendant:
 				case ItemType.Ring:
-				ItemCount itemCount = items.FirstOrDefault(test => test.item == item);
-
-				if (itemCount != null)
-				{
-					itemCount.count = Math.Max(0, itemCount.count - count);
-
-					if (itemCount.count == 0)
-					{
-						items.Remove(itemCount);
-					}
-				}
-
-				break;
-
-				case ItemType.Tool:
-				case ItemType.Armor:
-				for (int i = 0; i < count; i++)
-				{
-					itemCount = items.FirstOrDefault(test => test.item == item);
+					ItemCount itemCount = items.FirstOrDefault(test => test.item == item);
 
 					if (itemCount != null)
 					{
-						items.Remove(itemCount);
+						itemCount.count = Math.Max(0, itemCount.count - count);
+
+						if (itemCount.count == 0)
+						{
+							items.Remove(itemCount);
+						}
 					}
-				}
-				break;
+
+					break;
+
+				case ItemType.Tool:
+				case ItemType.Armor:
+					for (int i = 0; i < count; i++)
+					{
+						itemCount = items.FirstOrDefault(test => test.item == item);
+
+						if (itemCount != null)
+						{
+							items.Remove(itemCount);
+						}
+					}
+					break;
 			}
 		}
 

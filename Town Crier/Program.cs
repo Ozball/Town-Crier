@@ -1,38 +1,24 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using ActivityRoles;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot;
-using DiscordBot.Modules.ChatCraft;
-using Discord.Rest;
-using System.Linq;
-using System.Collections.Generic;
-using BugReporter;
-using Discord.Addons.Interactive;
-
-using ActivityRoles;
-using DiscordBot.Features.Wiki;
 using DiscordBot.Features;
+using DiscordBot.Modules.ChatCraft;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 class Program
 {
+	//readonly 
+	readonly Dictionary<ulong, IRole> inGameRoles = new Dictionary<ulong, IRole>();
 	readonly DiscordSocketClient client;
-	
-
-	readonly string token;
-
+	//init
+	private string token;
 	static Program program;
-
-	Dictionary<ulong, IRole> inGameRoles = new Dictionary<ulong, IRole>();
-
 	CommandsProcessor commandsProcessor;
-
-	SocketTextChannel logChannel;
-	string gettingStartedChannel;
 
 	// Program entry point
 	static void Main(string[] args)
@@ -45,22 +31,10 @@ class Program
 
 	Program()
 	{
+		//startup stuff
 		ChatCraft.Initialize();
 
-		Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
-
-		if (!File.Exists("token.txt"))
-		{
-			Console.WriteLine("You must provide a bot token in 'token.txt' alongside the .exe (in the folder mentioned above)");
-			Console.ReadLine();
-			return;
-		}
-
-		foreach (string line in System.IO.File.ReadLines("token.txt"))
-		{
-			token = line;
-			break;
-		}
+		token = GetToken();
 
 		client = new DiscordSocketClient(new DiscordSocketConfig
 		{
@@ -78,19 +52,35 @@ class Program
 			// add the `using` at the top, and uncomment this line:
 			//WebSocketProvider = WS4NetProvider.Instance
 		});
-		
 		// Subscribe the logging handler to both the client and the CommandService.
 		client.Log += Logger.Log;
 	}
 
-	public static async Task ExecuteCommand(string command, ICommandContext context)
+	string GetToken()
 	{
-		await program.commandsProcessor.ExecuteCommand(command, context);
+		//writes current dir
+		Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
+		//check for token
+		if (!File.Exists("token.txt"))
+		{
+			Console.WriteLine("You must provide a bot token in 'token.txt' alongside the .exe (in the folder mentioned above)");
+			Console.ReadLine();
+			return null;
+		}
+
+		return File.ReadAllText("token.txt").Trim();
 	}
 
 	public static SocketGuild GetGuild(ulong id = 334933825383563266)
 	{
 		return program.client.GetGuild(id);
+	}
+
+	#region Tasks
+
+	public static async Task ExecuteCommand(string command, ICommandContext context)
+	{
+		await program.commandsProcessor.ExecuteCommand(command, context);
 	}
 
 	private async Task MainAsync()
@@ -103,14 +93,14 @@ class Program
 		NewcomerHandler.Initialize(client);
 
 		client.Ready += ClientReadyAsync;
-		
+
 		client.Disconnected += Disconnected;
-		
+
 		await EnableRoleManager();
 
 		await client.LoginAsync(TokenType.Bot, token);
 		await client.StartAsync();
-		
+
 		await client.SetGameAsync("A Chatty Township Tale");
 
 		AccountModule.EnsureLoaded();
@@ -134,15 +124,21 @@ class Program
 		await activityRoleManager.SetEnabled(true);
 	}
 
-	async Task Disconnected(Exception ey)
-	{
-		Console.WriteLine("Disconnected");
-	}
-
-	async Task ClientReadyAsync()
+	Task ClientReadyAsync()
 	{
 		Console.WriteLine("Client Ready");
 
 		ChannelFilters.Apply(commandsProcessor);
+
+		return Task.CompletedTask;
 	}
+
+	Task Disconnected(Exception ey)
+	{
+		Console.WriteLine("Disconnected");
+
+		return Task.CompletedTask;
+	}
+
+	#endregion
 }

@@ -9,9 +9,9 @@ public static class ApiAccess
 	const int Timeout = 40;
 
 	public static IHighLevelApiClient ApiClient { get; private set; }
-	
+
 	static SHA512 sha512 = new SHA512Managed();
-	
+
 	static ApiAccess()
 	{
 		StartWithEndpoint(HighLevelApiClientFactory.ProductionEndpoint);
@@ -54,7 +54,8 @@ public static class ApiAccess
 		{
 			if (!File.Exists("account.txt"))
 			{
-				Console.WriteLine("`account.txt` expected next to be next to the .exe with the contents `username|password` (for your Alta account)");
+				Console.WriteLine("`account.txt` expected next to be next to the .exe " +
+					"with the contents `username|password` (for your Alta account)");
 				Console.ReadLine();
 				throw new Exception("No credentials provided");
 			}
@@ -73,14 +74,16 @@ public static class ApiAccess
 				{
 					password = HashString(password);
 
-					Console.WriteLine("Detected a password in the account file. Replaced it with a hash for security reasons.");
+					Console.WriteLine("Detected a password in the account file." +
+						" Replaced it with a hash for security reasons.");
 
 					File.WriteAllText("account.txt", username + "|" + password);
 				}
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine("`account.txt` found, but failed reading the contents. Expected format: `username|password` (for your Alta account)");
+				Console.WriteLine("`account.txt` found, but failed reading the contents." +
+					" Expected format: `username|password` (for your Alta account)");
 				Console.ReadLine();
 				throw new Exception("Invalid credential format");
 			}
@@ -88,7 +91,7 @@ public static class ApiAccess
 			try
 			{
 				await ApiClient.LoginAsync(username, password);
-				Console.WriteLine($"Logged in as {username}");
+				Console.WriteLine($"Logged in as {username} \n");
 			}
 			catch (Exception e)
 			{

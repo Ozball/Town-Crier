@@ -1,9 +1,7 @@
 ﻿using Discord;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -53,7 +51,7 @@ namespace DiscordBot.Modules.ChatCraft
 
 			Save();
 		}
-		
+
 		~ChatCraft()
 		{
 			Save();
@@ -82,7 +80,7 @@ namespace DiscordBot.Modules.ChatCraft
 				state.encounters.Add(new Encounter());
 				state.encounters[0].possibleEnemies.Add(new EnemyDefinition());
 				state.encounters[0].possibleLoot.Add(new ItemWeightCount());
-				state.players.Add(new Player() { identifier = 0, currentLocation = state.locations[0] } );
+				state.players.Add(new Player() { identifier = 0, currentLocation = state.locations[0] });
 				state.players[0].items.Add(new ItemCount());
 				state.players[0].locations.Add(new Location());
 				state.players[0].recipes.Add(new Recipe());
@@ -114,7 +112,7 @@ namespace DiscordBot.Modules.ChatCraft
 			}
 
 			state.combatInstances.RemoveAll(item => item == null);
-		
+
 			foreach (CombatInstance instance in state.combatInstances)
 			{
 				for (int i = 0; i < 2; i++)
@@ -183,10 +181,10 @@ namespace DiscordBot.Modules.ChatCraft
 
 			Console.WriteLine("Craft State Loaded");
 		}
-		
+
 		public void Save()
 		{
-            state.savesSinceBackup = (state.savesSinceBackup + 1) % 500;
+			state.savesSinceBackup = (state.savesSinceBackup + 1) % 500;
 
 			state.combatInstances.Clear();
 
@@ -235,7 +233,7 @@ namespace DiscordBot.Modules.ChatCraft
 		public Player GetPlayer(IUser user)
 		{
 			Player found;
-			
+
 			if (!playerMap.TryGetValue(user.Id, out found))
 			{
 				Player copyFrom = state.players[0];
@@ -243,14 +241,14 @@ namespace DiscordBot.Modules.ChatCraft
 				found = new Player()
 				{
 					identifier = user.Id,
-					
+
 					coins = copyFrom.coins,
 
 					currentLocation = copyFrom.currentLocation,
 
 					items = new List<ItemCount>(copyFrom.items),
 					locations = new List<Location>(copyFrom.locations),
-					recipes  = new List<Recipe>(copyFrom.recipes),
+					recipes = new List<Recipe>(copyFrom.recipes),
 				};
 
 				try
@@ -273,18 +271,18 @@ namespace DiscordBot.Modules.ChatCraft
 				{
 					found.equipped.Add(equipped.Key, equipped.Value == null ? null : new ItemCount(equipped.Value.item, equipped.Value.count));
 				}
-				
+
 				state.players.Add(found);
 
 				playerMap.Add(found.identifier, found);
 
-                foreach (Slot slot in state.slots)
-                {
-                    if (!found.equipped.ContainsKey(slot))
-                    {
-                        found.equipped.Add(slot, null);
-                    }
-                }
+				foreach (Slot slot in state.slots)
+				{
+					if (!found.equipped.ContainsKey(slot))
+					{
+						found.equipped.Add(slot, null);
+					}
+				}
 
 				Save();
 			}
