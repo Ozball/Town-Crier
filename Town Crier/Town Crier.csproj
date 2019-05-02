@@ -252,7 +252,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
   <PropertyGroup>
-    <PostBuildEvent>powershell start-process discordbot.exe</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>start taskkill /F /IM discordbot.exe /T</PreBuildEvent>
