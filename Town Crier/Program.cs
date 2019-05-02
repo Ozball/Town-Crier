@@ -38,7 +38,7 @@ class Program
 	static void Main(string[] args)
 	{
 		// Call the Program constructor, followed by the 
-		// MainAsync method and wait until it finishes (which should be never). Ayyyyye!
+		// MainAsync method and wait until it finishes (which should be never).
 		program = new Program();
 		program.MainAsync().GetAwaiter().GetResult();
 	}
