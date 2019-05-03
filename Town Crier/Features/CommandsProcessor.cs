@@ -112,7 +112,9 @@ namespace DiscordBot.Features
 				else
 				{
 					WikiSearcher.Process(message);
-                }
+
+					
+				}
 			}
 			catch (Exception e)
 			{
