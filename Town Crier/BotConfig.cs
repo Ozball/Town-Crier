@@ -12,5 +12,10 @@ namespace DiscordBot
         string username;
         string password;
         char botPrefix;
+
+        public BotConfig()
+        {
+            // Do loading of BotConfig.json
+        }
     }
 }
