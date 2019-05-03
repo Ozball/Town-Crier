@@ -24,6 +24,9 @@ namespace DiscordBot.Features
 		
 		readonly Dictionary<ulong, Func<SocketUserMessage, Task<bool>>> channelHandlers = new Dictionary<ulong, Func<SocketUserMessage, Task<bool>>>();
 
+        //Change this to change the prefix your bot uses!
+        public const char BOT_PREFIX = '!';
+
 		public CommandsProcessor(DiscordSocketClient client)
 		{
 			this.Client = client;
@@ -97,19 +100,19 @@ namespace DiscordBot.Features
 
 				bool isMentioned = message.HasMentionPrefix(Client.CurrentUser, ref commandStartIndex);
 
-				if (isMentioned || message.HasCharPrefix('!', ref commandStartIndex))
+				if (isMentioned || message.HasCharPrefix(BOT_PREFIX, ref commandStartIndex))
 				{
 					await CheckCommand(message, commandStartIndex);
-				}
+
+                    if (isMentioned)
+                    {
+                        await DoYouCare.Process(message);
+                    }
+                }
 				else
 				{
 					WikiSearcher.Process(message);
-
-					if (isMentioned)
-					{
-						await DoYouCare.Process(message);
-					}
-				}
+                }
 			}
 			catch (Exception e)
 			{

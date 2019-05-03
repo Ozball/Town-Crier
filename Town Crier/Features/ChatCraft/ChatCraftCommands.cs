@@ -137,7 +137,7 @@ namespace DiscordBot.Modules.ChatCraft
 			[Command]
 			public async Task GetStarted()
 			{
-				string prefix = "!tc ";
+				string prefix = Features.CommandsProcessor.BOT_PREFIX + "tc ";
 
 				List<string> commands = new List<string>();
 				List<string> descriptions = new List<string>();

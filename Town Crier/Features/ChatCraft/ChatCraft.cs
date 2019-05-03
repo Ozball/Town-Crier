@@ -66,7 +66,7 @@ namespace DiscordBot.Modules.ChatCraft
 			if (state == null)
 			{
 				state = new ChatCraftState();
-				state.stats.Add(new Stat());
+				state.stats.Add(new Stat() { name = "Default Stat" });
 				state.settings.defaultStats.Add(new StatCount() { stat = state.stats[0] });
 				state.items.Add(new Item());
 				state.items[0].craftForwardChances.Add(new ItemWeight());

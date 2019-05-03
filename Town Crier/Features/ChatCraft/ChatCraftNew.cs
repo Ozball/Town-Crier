@@ -779,7 +779,7 @@ namespace DiscordBot.Modules.ChatCraft
 		}
 
 		[Command("To")]
-		public async Task To([Found]Location location)
+		public async Task To([Found][Remainder]Location location)
 		{
 			Player player = GetPlayer();
 
@@ -1429,7 +1429,7 @@ namespace DiscordBot.Modules.ChatCraft
 		[Command("Help")]
 		public async Task Help()
 		{
-			string prefix = "!party ";
+			string prefix = Features.CommandsProcessor.BOT_PREFIX + "party ";
 
 			List<string> commands = new List<string>();
 			List<string> descriptions = new List<string>();

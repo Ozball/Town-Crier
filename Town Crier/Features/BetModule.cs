@@ -17,7 +17,7 @@ namespace DiscordBot
 		[Command, Alias("help")]
 		public async Task Help()
 		{
-			string prefix = "!bet ";
+			string prefix = Features.CommandsProcessor.BOT_PREFIX + "bet ";
 
 			List<string> commands = new List<string>();
 			List<string> descriptions = new List<string>();
