@@ -15,7 +15,7 @@ namespace DiscordBot
 
         public BotConfig()
         {
-            // Do loading of BotConfig.json
+            // Do loading of BotConfig.json - See ChatCraft.cs:64
         }
     }
 }
