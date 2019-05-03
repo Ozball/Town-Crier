@@ -31,8 +31,9 @@ class Program
 
 	Program()
 	{
-		//startup stuff
-		ChatCraft.Initialize();
+        //startup stuff
+        BotConfig.Initialize();
+        ChatCraft.Initialize();
 
 		token = GetToken();
 

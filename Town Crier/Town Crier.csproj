@@ -200,6 +200,7 @@
   <ItemGroup>
     <Compile Include="ActivityRoleManager.cs" />
     <Compile Include="ApiAccess.cs" />
+    <Compile Include="BotConfig.cs" />
     <Compile Include="Features\ChannelFilters.cs" />
     <Compile Include="Features\ChatCraft\ChatCraftState.cs" />
     <Compile Include="Features\ChatCraft\Connection.cs" />
